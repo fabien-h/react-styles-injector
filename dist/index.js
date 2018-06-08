@@ -71,13 +71,12 @@ var Styled = /** @class */ (function (_super) {
         return null;
     };
     Styled.prototype.render = function () {
-        var _this = this;
         var _a = this.props, children = _a.children, tag = _a.tag, className = _a.className, styles = _a.styles;
         var ComponentTag = tag || 'div';
         var compiledClasseName = [
             className || ''
         ].concat(styles.map(function (style) { return style.hash; })).join(' ');
-        return (React.createElement(ComponentTag, { className: compiledClasseName, ref: function (element) { return (_this.containerRef = element); } }, children));
+        return (React.createElement(ComponentTag, { className: compiledClasseName }, children));
     };
     return Styled;
 }(React.PureComponent));

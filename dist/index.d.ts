@@ -6,7 +6,6 @@ interface StyleInterface {
 interface StyledPropsInterface {
     children: any;
     className?: string;
-    containerRef?: any;
     id?: string;
     styles: StyleInterface[];
     tag?: string;
@@ -15,7 +14,6 @@ interface StyledStateInterface {
     concatenatedStyles: string;
 }
 export default class Styled extends React.PureComponent<StyledPropsInterface, StyledStateInterface> {
-    containerRef: HTMLElement;
     constructor(props: StyledPropsInterface);
     static getDerivedStateFromProps(props: StyledPropsInterface, state: StyledStateInterface): {
         concatenatedStyles: string;
