@@ -5,7 +5,7 @@ interface StyleInterface {
   styles: string;
 }
 
-interface StyledPropsInterface {
+interface InjectorPropsInterface {
   children: any;
   className?: string;
   id?: string;
@@ -13,45 +13,46 @@ interface StyledPropsInterface {
   tag?: string;
 }
 
-interface StyledStateInterface {
+interface InjectorStateInterface {
   concatenatedStyles: string;
 }
 
 // Hashmap containing the hash of all the already injected styles
-const existingStyles: { [key: string]: boolean } = {};
+let existingStyles: { [key: string]: boolean } = {};
 let existingStylesString: string = '';
 
 // Style tag in the DOM that will store all the styles of the application
 let styleTag: HTMLStyleElement;
 let styleTagContent: string = '';
 
-export default class Styled extends React.PureComponent<
-  StyledPropsInterface,
-  StyledStateInterface
+/**
+ * If the style tag does not exists, initialize it
+ * from the DOM if SSR pre-existed
+ * from scratch if no SSR pre-existed
+ */
+function initInjector(): void {
+  styleTag = document.getElementById('GLOBAL_STYLES') as HTMLStyleElement;
+
+  if (styleTag) {
+    styleTagContent = styleTag.innerHTML;
+    existingStylesString = styleTag.dataset['stylesHashes'] || '';
+    (existingStylesString.split(',') || []).forEach(
+      hash => (existingStyles[hash] = true)
+    );
+  } else {
+    styleTag = document.createElement('style');
+    styleTag.id = 'GLOBAL_STYLES';
+    document.head.appendChild(styleTag);
+  }
+}
+
+export default class Injector extends React.PureComponent<
+  InjectorPropsInterface,
+  InjectorStateInterface
 > {
-  constructor(props: StyledPropsInterface) {
+  constructor(props: InjectorPropsInterface) {
     super(props);
-
-    /**
-     * If the style tag does not exists, initialize it
-     * from the DOM if SSR pre-existed
-     * from scratch if no SSR pre-existed
-     */
-    if (!styleTag) {
-      styleTag = document.getElementById('GLOBAL_STYLES') as HTMLStyleElement;
-      if (styleTag) {
-        styleTagContent = styleTag.innerHTML;
-        existingStylesString = styleTag.dataset['stylesHashes'] || '';
-        (existingStylesString.split(',') || []).forEach(
-          hash => (existingStyles[hash] = true)
-        );
-      } else {
-        styleTag = document.createElement('style');
-        styleTag.id = 'GLOBAL_STYLES';
-        document.head.appendChild(styleTag);
-      }
-    }
-
+    if (!styleTag) initInjector();
     this.state = {
       /**
        * Concatenated list of style per component to check if
@@ -61,9 +62,23 @@ export default class Styled extends React.PureComponent<
     };
   }
 
+  /**
+   * Reset the cache and init again
+   *
+   * @memberOf Injector
+   */
+  public static clearInjectorCache = (): void => {
+    // Reset all the data
+    existingStyles = {};
+    existingStylesString = '';
+    styleTagContent = '';
+    // Init
+    initInjector();
+  };
+
   static getDerivedStateFromProps(
-    props: StyledPropsInterface,
-    state: StyledStateInterface
+    props: InjectorPropsInterface,
+    state: InjectorStateInterface
   ) {
     const { styles } = props;
     const { concatenatedStyles } = state;
