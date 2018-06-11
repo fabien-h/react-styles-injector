@@ -1,108 +1,60 @@
 import * as React from 'react';
 
-interface StyleInterface {
+export interface StyleInterface {
   hash: string;
   styles: string;
 }
 
-interface InjectorPropsInterface {
+export interface StyledPropsInterface {
   children: any;
+  // Will be added to the classnames from the styles hashes
   className?: string;
+  // Set the ID of the container
   id?: string;
   styles: StyleInterface[];
+  // Set the tag of the container
   tag?: string;
+  // If true, reset the cache for existing styles
+  initCache?: boolean;
 }
 
-interface InjectorStateInterface {
+export interface StyledStateInterface {
   concatenatedStyles: string;
 }
 
 // Hashmap containing the hash of all the already injected styles
 let existingStyles: { [key: string]: boolean } = {};
-let existingStylesString: string = '';
-
-// Style tag in the DOM that will store all the styles of the application
-let styleTag: HTMLStyleElement;
-let styleTagContent: string = '';
 
 /**
- * If the style tag does not exists, initialize it
- * from the DOM if SSR pre-existed
- * from scratch if no SSR pre-existed
+ * If the server cache is not initialized, the renderer will add
+ * a style tag per component. If the server cache is initialized
+ * and reset each time the root component is rendered, only the
+ * styles that have not already been injected will be.
  */
-function initInjector(): void {
-  styleTag = document.getElementById('GLOBAL_STYLES') as HTMLStyleElement;
+let useServerCache: boolean = false;
 
-  if (styleTag) {
-    styleTagContent = styleTag.innerHTML;
-    existingStylesString = styleTag.dataset['stylesHashes'] || '';
-    (existingStylesString.split(',') || []).forEach(
-      hash => (existingStyles[hash] = true)
-    );
-  } else {
-    styleTag = document.createElement('style');
-    styleTag.id = 'GLOBAL_STYLES';
-    document.head.appendChild(styleTag);
-  }
-}
+// Tell is the code is executed client side or server side
+const isClient: boolean = !!(
+  typeof window !== 'undefined' &&
+  window.document &&
+  window.document.createElement
+);
 
-export default class Injector extends React.PureComponent<
-  InjectorPropsInterface,
-  InjectorStateInterface
+export default class Styled extends React.PureComponent<
+  StyledPropsInterface,
+  {}
 > {
-  constructor(props: InjectorPropsInterface) {
+  constructor(props) {
     super(props);
-    if (!styleTag) initInjector();
-    this.state = {
-      /**
-       * Concatenated list of style per component to check if
-       * an update is needed
-       */
-      concatenatedStyles: ''
-    };
-  }
 
-  /**
-   * Reset the cache and init again
-   *
-   * @memberOf Injector
-   */
-  public static clearInjectorCache = (): void => {
-    // Reset all the data
-    existingStyles = {};
-    existingStylesString = '';
-    styleTagContent = '';
-    // Init
-    initInjector();
-  };
-
-  static getDerivedStateFromProps(
-    props: InjectorPropsInterface,
-    state: InjectorStateInterface
-  ) {
-    const { styles } = props;
-    const { concatenatedStyles } = state;
-    const updatedConcatenatedStyles: string = (styles || [])
-      .map(style => style.hash)
-      .join('');
-
-    if (concatenatedStyles !== updatedConcatenatedStyles) {
-      (props.styles || []).forEach(style => {
-        if (!existingStyles[style.hash]) {
-          existingStyles[style.hash] = true;
-          styleTagContent += style.styles;
-          styleTag.innerHTML = styleTagContent;
-          existingStylesString += `,${style.hash}`;
-          styleTag.dataset['stylesHashes'] = existingStylesString;
-        }
-      });
-
-      return {
-        concatenatedStyles: updatedConcatenatedStyles
-      };
+    /**
+     * Reset the cache if we are server-side and if
+     * init is set to true
+     */
+    if (!isClient && props.initCache) {
+      useServerCache = true;
+      existingStyles = {};
     }
-
-    return null;
   }
 
   public render(): JSX.Element {
@@ -113,8 +65,44 @@ export default class Injector extends React.PureComponent<
       ...styles.map(style => style.hash)
     ].join(' ');
 
+    /**
+     * If we are client side, inject the non cached
+     * style tags in the header ; then render the children
+     */
+    if (isClient) {
+      styles.forEach(style => {
+        if (!existingStyles[style.hash]) {
+          existingStyles[style.hash] = true;
+          let styleTag = document.createElement('style');
+          styleTag.id = style.hash;
+          styleTag.innerHTML = style.styles;
+          document.head.appendChild(styleTag);
+        }
+      });
+      return (
+        <ComponentTag className={compiledClasseName}>{children}</ComponentTag>
+      );
+    }
+
+    /**
+     * If we are server side, inject the style tag
+     * with the styles stringyfied inside
+     */
     return (
-      <ComponentTag className={compiledClasseName}>{children}</ComponentTag>
+      <>
+        {styles.map(style => {
+          if (useServerCache && existingStyles[style.hash]) return null;
+          existingStyles[style.hash] = true;
+          return (
+            <style
+              key={style.hash}
+              id={style.hash}
+              dangerouslySetInnerHTML={{ __html: style.styles }}
+            />
+          );
+        })}
+        <ComponentTag className={compiledClasseName}>{children}</ComponentTag>
+      </>
     );
   }
 }
