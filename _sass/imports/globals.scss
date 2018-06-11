@@ -1,0 +1,9 @@
+body {
+  font-family: IBM Plex, Roboto, Helvetica sans-serif;
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: $mobileTreshold) {
+    flex-direction: row;
+  }
+}
