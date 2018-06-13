@@ -1,25 +1,25 @@
 import * as React from 'react';
 
+// Export from pcss-loader
+// https://github.com/fabien-h/pcss-loader
 export interface StyleInterface {
   hash: string;
   styles: string;
 }
 
 export interface StyledPropsInterface {
-  children: any;
+  // React content of the node
+  children: React.ReactNode;
   // Will be added to the classnames from the styles hashes
   className?: string;
   // Set the ID of the container
   id?: string;
+  // Export from pcss-loader
   styles: StyleInterface[];
   // Set the tag of the container
   tag?: string;
-  // If true, reset the cache for existing styles
+  // If true, init and reset the cache for existing styles
   initCache?: boolean;
-}
-
-export interface StyledStateInterface {
-  concatenatedStyles: string;
 }
 
 // Hashmap containing the hash of all the already injected styles
@@ -40,6 +40,15 @@ const isClient: boolean = !!(
   window.document.createElement
 );
 
+// Tell if the mode is development
+// Has to be set in NODE_ENV
+let isDev = false;
+try {
+  // Has to be in a try catch because
+  // NODE_ENV may be not replaced or defined
+  isDev = NODE_ENV === 'development';
+} catch (error) {}
+
 export default class Styled extends React.PureComponent<
   StyledPropsInterface,
   {}
@@ -55,7 +64,29 @@ export default class Styled extends React.PureComponent<
       useServerCache = true;
       existingStyles = {};
     }
+
+    /**
+     * If we are client side in production mode
+     * inject the styles only once in the constructor
+     */
+    if (isClient && !isDev) this.injectStyles(props);
   }
+
+  private injectStyles = (props: StyledPropsInterface): void => {
+    props.styles.forEach(style => {
+      /**
+       * Inject in the head only if the element
+       * has not already been injected
+       */
+      if (!existingStyles[style.hash]) {
+        existingStyles[style.hash] = true;
+        let styleTag = document.createElement('style');
+        styleTag.id = style.hash;
+        styleTag.innerHTML = style.styles;
+        document.head.appendChild(styleTag);
+      }
+    });
+  };
 
   public render(): JSX.Element {
     const { children, tag, className, styles } = this.props;
@@ -63,22 +94,17 @@ export default class Styled extends React.PureComponent<
     const compiledClasseName = [
       className || '',
       ...styles.map(style => style.hash)
-    ].join(' ');
+    ]
+      .join(' ')
+      .trim();
 
-    /**
-     * If we are client side, inject the non cached
-     * style tags in the header ; then render the children
-     */
     if (isClient) {
-      styles.forEach(style => {
-        if (!existingStyles[style.hash]) {
-          existingStyles[style.hash] = true;
-          let styleTag = document.createElement('style');
-          styleTag.id = style.hash;
-          styleTag.innerHTML = style.styles;
-          document.head.appendChild(styleTag);
-        }
-      });
+      /**
+       * In dev mode, try to inject at each render since the
+       * styles may have changed following a hot module replacement
+       */
+      if (isDev) this.injectStyles(this.props);
+
       return (
         <ComponentTag className={compiledClasseName}>{children}</ComponentTag>
       );
@@ -86,7 +112,7 @@ export default class Styled extends React.PureComponent<
 
     /**
      * If we are server side, inject the style tag
-     * with the styles stringyfied inside
+     * with the styles stringyfied in a fragment
      */
     return (
       <>
@@ -96,7 +122,6 @@ export default class Styled extends React.PureComponent<
           return (
             <style
               key={style.hash}
-              id={style.hash}
               dangerouslySetInnerHTML={{ __html: style.styles }}
             />
           );

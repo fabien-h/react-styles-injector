@@ -1,6 +1,6 @@
 {
   "name": "react-styles-injector",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React component to inject styles into the DOM. Client and server ready.",
   "license": "MIT",
   "scripts": {
