@@ -24,32 +24,33 @@ var useServerCache = false;
 var isClient = !!(typeof window !== 'undefined' &&
     window.document &&
     window.document.createElement);
+// Tell if the mode is development
+// Has to be set in NODE_ENV
+var isDev = false;
+try {
+    // Has to be in a try catch because
+    // NODE_ENV may be not replaced or defined
+    isDev = NODE_ENV === 'development';
+}
+catch (error) { }
 var Styled = /** @class */ (function (_super) {
     __extends(Styled, _super);
     function Styled(props) {
         var _this = _super.call(this, props) || this;
         /**
-         * Reset the cache if we are server-side and if
-         * init is set to true
+         * If only one style is passed, enclose in an array
          */
-        if (!isClient && props.initCache) {
-            useServerCache = true;
-            existingStyles = {};
-        }
-        return _this;
-    }
-    Styled.prototype.render = function () {
-        var _a = this.props, children = _a.children, tag = _a.tag, className = _a.className, styles = _a.styles;
-        var ComponentTag = tag || 'div';
-        var compiledClasseName = [
-            className || ''
-        ].concat(styles.map(function (style) { return style.hash; })).join(' ');
-        /**
-         * If we are client side, inject the non cached
-         * style tags in the header ; then render the children
-         */
-        if (isClient) {
-            styles.forEach(function (style) {
+        _this.stylesEnsuredAsArray = function (styles) {
+            if (Array.isArray(styles))
+                return styles;
+            return [styles];
+        };
+        _this.injectStyles = function (props) {
+            _this.stylesEnsuredAsArray(props.styles).forEach(function (style) {
+                /**
+                 * Inject in the head only if the element
+                 * has not already been injected
+                 */
                 if (!existingStyles[style.hash]) {
                     existingStyles[style.hash] = true;
                     var styleTag = document.createElement('style');
@@ -58,18 +59,49 @@ var Styled = /** @class */ (function (_super) {
                     document.head.appendChild(styleTag);
                 }
             });
+        };
+        /**
+         * Reset the cache if we are server-side and if
+         * init is set to true
+         */
+        if (!isClient && props.initCache) {
+            useServerCache = true;
+            existingStyles = {};
+        }
+        /**
+         * If we are client side in production mode
+         * inject the styles only once in the constructor
+         */
+        if (isClient && !isDev)
+            _this.injectStyles(props);
+        return _this;
+    }
+    Styled.prototype.render = function () {
+        var _a = this.props, children = _a.children, tag = _a.tag, className = _a.className, styles = _a.styles;
+        var ComponentTag = tag || 'div';
+        var compiledClasseName = [
+            className || ''
+        ].concat(this.stylesEnsuredAsArray(styles).map(function (style) { return style.hash; })).join(' ')
+            .trim();
+        if (isClient) {
+            /**
+             * In dev mode, try to inject at each render since the
+             * styles may have changed following a hot module replacement
+             */
+            if (isDev)
+                this.injectStyles(this.props);
             return (React.createElement(ComponentTag, { className: compiledClasseName }, children));
         }
         /**
          * If we are server side, inject the style tag
-         * with the styles stringyfied inside
+         * with the styles stringyfied in a fragment
          */
         return (React.createElement(React.Fragment, null,
-            styles.map(function (style) {
+            this.stylesEnsuredAsArray(styles).map(function (style) {
                 if (useServerCache && existingStyles[style.hash])
                     return null;
                 existingStyles[style.hash] = true;
-                return (React.createElement("style", { key: style.hash, id: style.hash, dangerouslySetInnerHTML: { __html: style.styles } }));
+                return (React.createElement("style", { key: style.hash, dangerouslySetInnerHTML: { __html: style.styles } }));
             }),
             React.createElement(ComponentTag, { className: compiledClasseName }, children)));
     };

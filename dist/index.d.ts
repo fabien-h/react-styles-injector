@@ -4,18 +4,20 @@ export interface StyleInterface {
     styles: string;
 }
 export interface StyledPropsInterface {
-    children: any;
+    children: React.ReactNode;
     className?: string;
     id?: string;
-    styles: StyleInterface[];
+    styles: StyleInterface[] | StyleInterface;
     tag?: string;
     initCache?: boolean;
 }
-export interface StyledStateInterface {
-    concatenatedStyles: string;
-}
 export default class Styled extends React.PureComponent<StyledPropsInterface, {}> {
     constructor(props: any);
+    /**
+     * If only one style is passed, enclose in an array
+     */
+    private stylesEnsuredAsArray;
+    private injectStyles;
     render(): JSX.Element;
 }
 //# sourceMappingURL=index.d.ts.map

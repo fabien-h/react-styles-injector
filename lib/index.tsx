@@ -1,4 +1,5 @@
 import * as React from 'react';
+declare var NODE_ENV: string;
 
 // Export from pcss-loader
 // https://github.com/fabien-h/pcss-loader
