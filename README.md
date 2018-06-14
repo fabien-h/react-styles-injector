@@ -97,6 +97,22 @@ This property is used server side only. It helps with rendering time optimizatio
 
 > Caching cannot be the default behavior because the renderer server side may not be stateless and no styles would be injected in the next render.
 
+### Property `containerRef`: function
+
+If you need a reference to the actual DOM element for the component container, you can pass a `containerRef` function.
+
+```JavaScript
+    <Styled
+        styles={{}}
+        tag='main'
+        id='mainContainer'
+        containerRef={element => (this.containerRef = element)}
+    >
+        ...
+```
+
+In the parent of the `Styled` component, `this.containerRef` will be a reference to the DOM `main #mainContainer` html element.
+
 ## Dev mode width `NODE_ENV`
 
 If you pass `development` to the `NODE_ENV` environment variable, `react-styled-injector` starts in dev mode. It means that the injector re-inject more aggressively the styles in the `head` it should solve some rendering issues with [react HMR](https://github.com/gaearon/react-hot-loader)

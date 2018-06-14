@@ -10,6 +10,7 @@ export interface StyledPropsInterface {
     styles: StyleInterface[] | StyleInterface;
     tag?: string;
     initCache?: boolean;
+    containerRef?: (element: HTMLElement) => void;
 }
 export default class Styled extends React.PureComponent<StyledPropsInterface, {}> {
     constructor(props: any);

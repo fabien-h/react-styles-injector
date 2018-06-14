@@ -21,6 +21,8 @@ export interface StyledPropsInterface {
   tag?: string;
   // If true, init and reset the cache for existing styles
   initCache?: boolean;
+  // The DOM element corresponding to the container
+  containerRef?: (element: HTMLElement) => void;
 }
 
 // Hashmap containing the hash of all the already injected styles
@@ -100,7 +102,7 @@ export default class Styled extends React.PureComponent<
   };
 
   public render(): JSX.Element {
-    const { children, tag, className, styles } = this.props;
+    const { containerRef, children, tag, className, styles } = this.props;
     const ComponentTag = tag || 'div';
     const compiledClasseName = [
       className || '',
@@ -117,7 +119,9 @@ export default class Styled extends React.PureComponent<
       if (isDev) this.injectStyles(this.props);
 
       return (
-        <ComponentTag className={compiledClasseName}>{children}</ComponentTag>
+        <ComponentTag ref={containerRef || null} className={compiledClasseName}>
+          {children}
+        </ComponentTag>
       );
     }
 

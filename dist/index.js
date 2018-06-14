@@ -77,7 +77,7 @@ var Styled = /** @class */ (function (_super) {
         return _this;
     }
     Styled.prototype.render = function () {
-        var _a = this.props, children = _a.children, tag = _a.tag, className = _a.className, styles = _a.styles;
+        var _a = this.props, containerRef = _a.containerRef, children = _a.children, tag = _a.tag, className = _a.className, styles = _a.styles;
         var ComponentTag = tag || 'div';
         var compiledClasseName = [
             className || ''
@@ -90,7 +90,7 @@ var Styled = /** @class */ (function (_super) {
              */
             if (isDev)
                 this.injectStyles(this.props);
-            return (React.createElement(ComponentTag, { className: compiledClasseName }, children));
+            return (React.createElement(ComponentTag, { ref: containerRef || null, className: compiledClasseName }, children));
         }
         /**
          * If we are server side, inject the style tag
