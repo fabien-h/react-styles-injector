@@ -1,7 +1,7 @@
 {
   "name": "react-styles-injector",
-  "version": "0.0.4",
-  "description": "React component to inject styles into the DOM. Client and server ready.",
+  "version": "0.0.5",
+  "description": "React component to inject scoped styles into the DOM. Client and server ready.",
   "license": "MIT",
   "scripts": {
     "build": "npx tsc"

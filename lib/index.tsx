@@ -15,7 +15,7 @@ export interface StyledPropsInterface {
   // Set the ID of the container
   id?: string;
   // Export from pcss-loader
-  styles: StyleInterface[];
+  styles: StyleInterface[] | StyleInterface;
   // Set the tag of the container
   tag?: string;
   // If true, init and reset the cache for existing styles
@@ -72,8 +72,18 @@ export default class Styled extends React.PureComponent<
     if (isClient && !isDev) this.injectStyles(props);
   }
 
+  /**
+   * If only one style is passed, enclose in an array
+   */
+  private stylesEnsuredAsArray = (
+    styles: StyleInterface[] | StyleInterface
+  ): StyleInterface[] => {
+    if (Array.isArray(styles)) return styles;
+    return [styles];
+  };
+
   private injectStyles = (props: StyledPropsInterface): void => {
-    props.styles.forEach(style => {
+    this.stylesEnsuredAsArray(props.styles).forEach(style => {
       /**
        * Inject in the head only if the element
        * has not already been injected
@@ -93,7 +103,7 @@ export default class Styled extends React.PureComponent<
     const ComponentTag = tag || 'div';
     const compiledClasseName = [
       className || '',
-      ...styles.map(style => style.hash)
+      ...this.stylesEnsuredAsArray(styles).map(style => style.hash)
     ]
       .join(' ')
       .trim();
@@ -116,7 +126,7 @@ export default class Styled extends React.PureComponent<
      */
     return (
       <>
-        {styles.map(style => {
+        {this.stylesEnsuredAsArray(styles).map(style => {
           if (useServerCache && existingStyles[style.hash]) return null;
           existingStyles[style.hash] = true;
           return (
