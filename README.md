@@ -7,6 +7,12 @@ Table of Contents
 
 - [Basic example](#basic-example)
 - [Properties](#properties)
+    - [`tag`: string](#property-tag-string)
+    - [`id`: string](#property-id-string)
+    - [`styles`: object or array of objects](#property-styles-object-or-array-of-objects)
+    - [`className`: string](#property-classname-string)
+    - [`initCache`: boolean](#property-initcache-boolean)
+    - [`containerRef`: function](#property-containerref-function)
 - [Dev mode width `NODE_ENV`](#dev-mode-width-node_env)
 
 Basic example
