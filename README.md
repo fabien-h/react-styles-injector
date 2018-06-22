@@ -76,16 +76,19 @@ Properties
 <sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 ### Property `tag`: string
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 The default tag for your component is `div`.
 
 You can change this by passing the tag argument as a string. Example: `aside`, `main`, `button`...
 
 ### Property `id`: string
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 An `id` for the HTML tag.
 
 ### Property `styles`: object or array of objects
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 Styles objects must have the following structure:
 
@@ -101,10 +104,12 @@ The component uses the `hash` as its class name.
 To compose styles, you can pass more than one style object. Multiple `style` tags are injected, and the component has multiple classes.
 
 ### Property `className`: string
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 A string that is added to the classe(s) from the styles. Can be one ar several classes; separated by a space.
 
 ### Property `initCache`: boolean
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 This property is used server side only. It helps with rendering time optimization time and HTML weight. The idea is to inject the each `style` tag once pet hash.
 
@@ -115,6 +120,7 @@ This property is used server side only. It helps with rendering time optimizatio
 > Caching cannot be the default behavior because the renderer server side may not be stateless and no styles would be injected in the next render.
 
 ### Property `containerRef`: function
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 If you need a reference to the actual DOM element for the component container, you can pass a `containerRef` function.
 
