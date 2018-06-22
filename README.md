@@ -2,7 +2,16 @@
 
 `React Styles Injector` is a [React](https://reactjs.org/) component that injects scoped styles into the DOM. Client and server side ready. Plays well with [pcss-loader for webpack](https://github.com/fabien-h/pcss-loader).
 
-## Basic example
+Table of Contents
+------------
+
+- [Basic example](#basic-example)
+- [Properties](#properties)
+- [Dev mode width `NODE_ENV`](#dev-mode-width-node_env)
+
+Basic example
+------------
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 Install with `npm i -S react-styles-injector`.
 
@@ -56,7 +65,9 @@ and
 - Client-side, the style tag is injected into the `head`.
 - Server side, the style tag is injected into the `body`, next to the `main` tag.
 
-## Properties
+Properties
+------------
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 ### Property `tag`: string
 
@@ -113,6 +124,8 @@ If you need a reference to the actual DOM element for the component container, y
 
 In the parent of the `Styled` component, `this.containerRef` will be a reference to the DOM `main #mainContainer` html element.
 
-## Dev mode width `NODE_ENV`
+Dev mode width `NODE_ENV`
+------------
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
 
 If you pass `development` to the `NODE_ENV` environment variable, `react-styled-injector` starts in dev mode. It means that the injector re-inject more aggressively the styles in the `head` it should solve some rendering issues with [react HMR](https://github.com/gaearon/react-hot-loader)
