@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 declare var NODE_ENV: string;
 
 // Export from pcss-loader

@@ -1,8 +1,11 @@
 "use strict";
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -10,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+var react_1 = require("react");
 // Hashmap containing the hash of all the already injected styles
 var existingStyles = {};
 /**
@@ -77,7 +80,7 @@ var Styled = /** @class */ (function (_super) {
         return _this;
     }
     Styled.prototype.render = function () {
-        var _a = this.props, containerRef = _a.containerRef, children = _a.children, tag = _a.tag, className = _a.className, styles = _a.styles;
+        var _a = this.props, styles = _a.styles, className = _a.className, children = _a.children, id = _a.id, tag = _a.tag, containerRef = _a.containerRef;
         var ComponentTag = tag || 'div';
         var compiledClasseName = [
             className || ''
@@ -90,22 +93,22 @@ var Styled = /** @class */ (function (_super) {
              */
             if (isDev)
                 this.injectStyles(this.props);
-            return (React.createElement(ComponentTag, { ref: containerRef || null, className: compiledClasseName }, children));
+            return (react_1.default.createElement(ComponentTag, { id: id || '', ref: containerRef || null, className: compiledClasseName }, children));
         }
         /**
          * If we are server side, inject the style tag
          * with the styles stringyfied in a fragment
          */
-        return (React.createElement(React.Fragment, null,
+        return (react_1.default.createElement(react_1.default.Fragment, null,
             this.stylesEnsuredAsArray(styles).map(function (style) {
                 if (useServerCache && existingStyles[style.hash])
                     return null;
                 existingStyles[style.hash] = true;
-                return (React.createElement("style", { key: style.hash, dangerouslySetInnerHTML: { __html: style.styles } }));
+                return (react_1.default.createElement("style", { key: style.hash, dangerouslySetInnerHTML: { __html: style.styles } }));
             }),
-            React.createElement(ComponentTag, { className: compiledClasseName }, children)));
+            react_1.default.createElement(ComponentTag, { id: id || '', className: compiledClasseName }, children)));
     };
     return Styled;
-}(React.PureComponent));
+}(react_1.default.PureComponent));
 exports.default = Styled;
 //# sourceMappingURL=index.js.map

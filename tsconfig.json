@@ -1,14 +1,14 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "alwaysStrict": true,
-    "declaration": true,
-    "declarationMap": true,
-    "jsx": "react",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "sourceMap": true,
-    "strictNullChecks": true,
-    "target": "es5"
-  }
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"alwaysStrict": true,
+		"declaration": true,
+		"declarationMap": true,
+		"jsx": "react",
+		"module": "commonjs",
+		"outDir": "./dist",
+		"sourceMap": true,
+		"strictNullChecks": true,
+		"target": "es5"
+	}
 }
