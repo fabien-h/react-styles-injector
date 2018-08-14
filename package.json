@@ -1,25 +1,25 @@
 {
-  "name": "react-styles-injector",
-  "version": "0.0.7",
-  "description": "React component to inject scoped styles into the DOM. Client and server ready.",
-  "license": "MIT",
-  "scripts": {
-    "build": "npx tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fabien-h/react-styles-injector"
-  },
-  "homepage": "https://github.com/fabien-h/react-styles-injector#readme",
-  "bugs": "https://github.com/fabien-h/react-styles-injector/issues",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "author": "Fabien Huet <fabien.huet@gmail.com> (https://wax-o.com)",
-  "devDependencies": {
-    "@types/react": "^16.3.17",
-    "typescript": "^2.9.2"
-  },
-  "dependencies": {
-    "react": "^16.4.1"
-  }
+	"name": "react-styles-injector",
+	"version": "0.0.8",
+	"description": "React component to inject scoped styles into the DOM. Client and server ready.",
+	"license": "MIT",
+	"scripts": {
+		"build": "npx tsc"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fabien-h/react-styles-injector"
+	},
+	"homepage": "https://github.com/fabien-h/react-styles-injector#readme",
+	"bugs": "https://github.com/fabien-h/react-styles-injector/issues",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"author": "Fabien Huet <fabien.huet@gmail.com> (https://wax-o.com)",
+	"devDependencies": {
+		"@types/react": "^16.3.17",
+		"typescript": "^2.9.2"
+	},
+	"dependencies": {
+		"react": "^16.4.1"
+	}
 }
