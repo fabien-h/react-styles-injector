@@ -111,7 +111,6 @@ var Styled = /** @class */ (function (_super) {
             className || ''
         ].concat(this.stylesEnsuredAsArray(styles).map(function (style) { return style.hash; })).join(' ')
             .trim();
-        console.log(this.props);
         if (isClient) {
             /**
              * In dev mode, try to inject at each render since the
