@@ -124,8 +124,6 @@ export default class Styled extends React.PureComponent<
 			.join(' ')
 			.trim();
 
-		console.log(this.props);
-
 		if (isClient) {
 			/**
 			 * In dev mode, try to inject at each render since the
