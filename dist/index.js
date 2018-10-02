@@ -12,6 +12,26 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 // Hashmap containing the hash of all the already injected styles
@@ -49,11 +69,16 @@ var Styled = /** @class */ (function (_super) {
             return [styles];
         };
         _this.injectStyles = function (props) {
-            _this.stylesEnsuredAsArray(props.styles).forEach(function (style) {
-                /**
-                 * Inject in the head only if the element
-                 * has not already been injected
-                 */
+            /**
+             * Ensure client side and document exists
+             */
+            if (!document || !document.head)
+                return;
+            /**
+             * Inject in the head only if the element
+             * has not already been injected
+             */
+            return _this.stylesEnsuredAsArray(props.styles).forEach(function (style) {
                 if (!existingStyles[style.hash]) {
                     existingStyles[style.hash] = true;
                     var styleTag = document.createElement('style');
@@ -80,12 +105,13 @@ var Styled = /** @class */ (function (_super) {
         return _this;
     }
     Styled.prototype.render = function () {
-        var _a = this.props, styles = _a.styles, className = _a.className, children = _a.children, id = _a.id, tag = _a.tag, containerRef = _a.containerRef;
+        var _a = this.props, className = _a.className, containerRef = _a.containerRef, children = _a.children, styles = _a.styles, tag = _a.tag, otherHTMLProps = __rest(_a, ["className", "containerRef", "children", "styles", "tag"]);
         var ComponentTag = tag || 'div';
         var compiledClasseName = [
             className || ''
         ].concat(this.stylesEnsuredAsArray(styles).map(function (style) { return style.hash; })).join(' ')
             .trim();
+        console.log(this.props);
         if (isClient) {
             /**
              * In dev mode, try to inject at each render since the
@@ -93,11 +119,12 @@ var Styled = /** @class */ (function (_super) {
              */
             if (isDev)
                 this.injectStyles(this.props);
-            return (React.createElement(ComponentTag, { id: id || '', ref: containerRef || null, className: compiledClasseName }, children));
+            return (React.createElement(ComponentTag, __assign({ className: compiledClasseName, ref: containerRef || null }, otherHTMLProps), children));
         }
         /**
          * If we are server side, inject the style tag
          * with the styles stringyfied in a fragment
+         * and we don't add the container ref
          */
         return (React.createElement(React.Fragment, null,
             this.stylesEnsuredAsArray(styles).map(function (style) {
@@ -106,7 +133,7 @@ var Styled = /** @class */ (function (_super) {
                 existingStyles[style.hash] = true;
                 return (React.createElement("style", { key: style.hash, dangerouslySetInnerHTML: { __html: style.styles } }));
             }),
-            React.createElement(ComponentTag, { id: id || '', className: compiledClasseName }, children)));
+            React.createElement(ComponentTag, __assign({ className: compiledClasseName }, otherHTMLProps), children)));
     };
     return Styled;
 }(React.PureComponent));

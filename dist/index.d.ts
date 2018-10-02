@@ -4,13 +4,14 @@ export interface StyleInterface {
     styles: string;
 }
 export interface StyledPropsInterface {
-    children: React.ReactNode;
     className?: string;
     id?: string;
+    children: React.ReactNode;
     styles: StyleInterface[] | StyleInterface;
     tag?: string;
     initCache?: boolean;
     containerRef?: (element: HTMLElement) => void;
+    onClick?: () => void;
 }
 export default class Styled extends React.PureComponent<StyledPropsInterface, {}> {
     constructor(props: any);

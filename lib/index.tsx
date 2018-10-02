@@ -9,12 +9,12 @@ export interface StyleInterface {
 }
 
 export interface StyledPropsInterface {
+	// Class
+	className?: string;
+	// Id
+	id?: string;
 	// React content of the node
 	children: React.ReactNode;
-	// Will be added to the classnames from the styles hashes
-	className?: string;
-	// Set the ID of the container
-	id?: string;
 	// Export from pcss-loader
 	styles: StyleInterface[] | StyleInterface;
 	// Set the tag of the container
@@ -23,6 +23,8 @@ export interface StyledPropsInterface {
 	initCache?: boolean;
 	// The DOM element corresponding to the container
 	containerRef?: (element: HTMLElement) => void;
+	// Click event
+	onClick?: () => void;
 }
 
 // Hashmap containing the hash of all the already injected styles
@@ -86,23 +88,34 @@ export default class Styled extends React.PureComponent<
 	};
 
 	private injectStyles = (props: StyledPropsInterface): void => {
-		this.stylesEnsuredAsArray(props.styles).forEach(style => {
-			/**
-			 * Inject in the head only if the element
-			 * has not already been injected
-			 */
+		/**
+		 * Ensure client side and document exists
+		 */
+		if (!document || !document.head) return;
+		/**
+		 * Inject in the head only if the element
+		 * has not already been injected
+		 */
+		return this.stylesEnsuredAsArray(props.styles).forEach(style => {
 			if (!existingStyles[style.hash]) {
 				existingStyles[style.hash] = true;
 				let styleTag = document.createElement('style');
 				styleTag.id = style.hash;
 				styleTag.innerHTML = style.styles;
-				document.head.appendChild(styleTag);
+				(document.head as HTMLHeadElement).appendChild(styleTag);
 			}
 		});
 	};
 
 	public render(): JSX.Element {
-		const { styles, className, children, id, tag, containerRef } = this.props;
+		const {
+			className,
+			containerRef,
+			children,
+			styles,
+			tag,
+			...otherHTMLProps
+		} = this.props;
 		const ComponentTag = tag || 'div';
 		const compiledClasseName = [
 			className || '',
@@ -110,6 +123,8 @@ export default class Styled extends React.PureComponent<
 		]
 			.join(' ')
 			.trim();
+
+		console.log(this.props);
 
 		if (isClient) {
 			/**
@@ -120,9 +135,9 @@ export default class Styled extends React.PureComponent<
 
 			return (
 				<ComponentTag
-					id={id || ''}
-					ref={containerRef || null}
 					className={compiledClasseName}
+					ref={containerRef || null}
+					{...otherHTMLProps}
 				>
 					{children}
 				</ComponentTag>
@@ -132,6 +147,7 @@ export default class Styled extends React.PureComponent<
 		/**
 		 * If we are server side, inject the style tag
 		 * with the styles stringyfied in a fragment
+		 * and we don't add the container ref
 		 */
 		return (
 			<>
@@ -145,7 +161,7 @@ export default class Styled extends React.PureComponent<
 						/>
 					);
 				})}
-				<ComponentTag id={id || ''} className={compiledClasseName}>
+				<ComponentTag className={compiledClasseName} {...otherHTMLProps}>
 					{children}
 				</ComponentTag>
 			</>
