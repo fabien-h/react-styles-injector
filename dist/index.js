@@ -105,7 +105,7 @@ var Styled = /** @class */ (function (_super) {
         return _this;
     }
     Styled.prototype.render = function () {
-        var _a = this.props, className = _a.className, containerRef = _a.containerRef, children = _a.children, styles = _a.styles, tag = _a.tag, otherHTMLProps = __rest(_a, ["className", "containerRef", "children", "styles", "tag"]);
+        var _a = this.props, asFragment = _a.asFragment, children = _a.children, className = _a.className, containerRef = _a.containerRef, styles = _a.styles, tag = _a.tag, otherHTMLProps = __rest(_a, ["asFragment", "children", "className", "containerRef", "styles", "tag"]);
         var ComponentTag = tag || 'div';
         var compiledClasseName = [
             className || ''
@@ -118,11 +118,14 @@ var Styled = /** @class */ (function (_super) {
              */
             if (isDev)
                 this.injectStyles(this.props);
+            if (asFragment) {
+                return React.createElement(React.Fragment, null, children);
+            }
             return (React.createElement(ComponentTag, __assign({ className: compiledClasseName, ref: containerRef || null }, otherHTMLProps), children));
         }
         /**
          * If we are server side, inject the style tag
-         * with the styles stringyfied in a fragment
+         * with the styles stringified in a fragment
          * and we don't add the container ref
          */
         return (React.createElement(React.Fragment, null,
@@ -132,7 +135,7 @@ var Styled = /** @class */ (function (_super) {
                 existingStyles[style.hash] = true;
                 return (React.createElement("style", { key: style.hash, dangerouslySetInnerHTML: { __html: style.styles } }));
             }),
-            React.createElement(ComponentTag, __assign({ className: compiledClasseName }, otherHTMLProps), children)));
+            asFragment ? (React.createElement(ComponentTag, __assign({ className: compiledClasseName }, otherHTMLProps), children)) : (children)));
     };
     return Styled;
 }(React.PureComponent));

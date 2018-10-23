@@ -12,6 +12,7 @@ export interface StyledPropsInterface {
     initCache?: boolean;
     containerRef?: (element: HTMLElement) => void;
     onClick?: () => void;
+    asFragment?: boolean;
 }
 export default class Styled extends React.PureComponent<StyledPropsInterface, {}> {
     constructor(props: any);
