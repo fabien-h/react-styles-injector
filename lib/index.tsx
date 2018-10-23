@@ -25,6 +25,8 @@ export interface StyledPropsInterface {
 	containerRef?: (element: HTMLElement) => void;
 	// Click event
 	onClick?: () => void;
+	// Option to make the element return a fragment without enclosing tag
+	asFragment?: boolean;
 }
 
 // Hashmap containing the hash of all the already injected styles
@@ -109,9 +111,10 @@ export default class Styled extends React.PureComponent<
 
 	public render(): JSX.Element {
 		const {
+			asFragment,
+			children,
 			className,
 			containerRef,
-			children,
 			styles,
 			tag,
 			...otherHTMLProps
@@ -131,6 +134,10 @@ export default class Styled extends React.PureComponent<
 			 */
 			if (isDev) this.injectStyles(this.props);
 
+			if (asFragment) {
+				return <>{children}</>;
+			}
+
 			return (
 				<ComponentTag
 					className={compiledClasseName}
@@ -144,7 +151,7 @@ export default class Styled extends React.PureComponent<
 
 		/**
 		 * If we are server side, inject the style tag
-		 * with the styles stringyfied in a fragment
+		 * with the styles stringified in a fragment
 		 * and we don't add the container ref
 		 */
 		return (
@@ -159,9 +166,13 @@ export default class Styled extends React.PureComponent<
 						/>
 					);
 				})}
-				<ComponentTag className={compiledClasseName} {...otherHTMLProps}>
-					{children}
-				</ComponentTag>
+				{asFragment ? (
+					<ComponentTag className={compiledClasseName} {...otherHTMLProps}>
+						{children}
+					</ComponentTag>
+				) : (
+					children
+				)}
 			</>
 		);
 	}
