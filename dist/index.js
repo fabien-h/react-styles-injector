@@ -135,7 +135,7 @@ var Styled = /** @class */ (function (_super) {
                 existingStyles[style.hash] = true;
                 return (React.createElement("style", { key: style.hash, dangerouslySetInnerHTML: { __html: style.styles } }));
             }),
-            asFragment ? (React.createElement(ComponentTag, __assign({ className: compiledClasseName }, otherHTMLProps), children)) : (children)));
+            asFragment ? (children) : (React.createElement(ComponentTag, __assign({ className: compiledClasseName }, otherHTMLProps), children))));
     };
     return Styled;
 }(React.PureComponent));

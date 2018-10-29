@@ -167,11 +167,11 @@ export default class Styled extends React.PureComponent<
 					);
 				})}
 				{asFragment ? (
+					children
+				) : (
 					<ComponentTag className={compiledClasseName} {...otherHTMLProps}>
 						{children}
 					</ComponentTag>
-				) : (
-					children
 				)}
 			</>
 		);
