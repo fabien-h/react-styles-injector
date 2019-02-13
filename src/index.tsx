@@ -108,7 +108,7 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
 
       return React.createElement(
         ComponentTag,
-        { className: compiledClasseName, ref: containerRef, ...otherHTMLProps },
+        { ...otherHTMLProps, className: compiledClasseName, ref: containerRef },
         children,
       );
     }
@@ -135,9 +135,9 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
           : React.createElement(
               ComponentTag,
               {
+                ...otherHTMLProps,
                 className: compiledClasseName,
                 ref: containerRef,
-                ...otherHTMLProps,
               },
               children,
             )}
