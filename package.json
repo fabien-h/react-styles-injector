@@ -1,26 +1,57 @@
 {
-	"name": "react-styles-injector",
-	"version": "0.1.2",
-	"description": "React component to inject scoped styles into the DOM. Client and server ready.",
-	"license": "MIT",
-	"scripts": {
-		"build": "npx tsc"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/fabien-h/react-styles-injector"
-	},
-	"homepage": "https://github.com/fabien-h/react-styles-injector#readme",
-	"bugs": "https://github.com/fabien-h/react-styles-injector/issues",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"author": "Fabien Huet <fabien.huet@gmail.com> (https://wax-o.com)",
-	"devDependencies": {
-		"@types/react": "^16.4.14",
-		"tsc": "^1.20150623.0",
-		"typescript": "^3.1.1"
-	},
-	"dependencies": {
-		"react": "^16.5.2"
-	}
+  "name": "react-styles-injector",
+  "version": "0.1.3",
+  "description": "React component to inject scoped styles into the DOM. Client and server ready.",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es5.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "pcss",
+    "react",
+    "styles"
+  ],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "scripts": {
+    "build:dev-watch": "rollup -w --config rollup.config.dev.js",
+    "build": "rimraf dist && tsc --module commonjs && rollup --config rollup.config.build.js",
+    "dev": "rimraf dist && concurrently \"npm run build:dev-watch\" --kill-others --restartTries 2 --restartDelay 200",
+    "release": "npm run build && release-it",
+    "test:dev": "jest --watchAll"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabien-h/react-styles-injector.git"
+  },
+  "author": "Fabien Huet <fabien.huet@gmail.com> (https://wax-o.com)",
+  "bugs": {
+    "url": "https://github.com/fabien-h/react-styles-injector/issues"
+  },
+  "homepage": "https://github.com/fabien-h/react-styles-injector#readme",
+  "directories": {
+    "test": "tests"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.2",
+    "@types/react-dom": "^16.8.0",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "release-it": "^10.1.0",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.1.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript2": "^0.19.2",
+    "tsc": "^1.20150623.0",
+    "typescript": "^3.3.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }

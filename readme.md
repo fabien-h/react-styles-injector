@@ -15,7 +15,8 @@ It plays well with [pcss-loader for webpack](https://github.com/fabien-h/pcss-lo
   - [`className`: string](#property-classname-string)
   - [`initCache`: boolean](#property-initcache-boolean)
   - [`containerRef`: function](#property-containerref-function)
-  - [`asFragment`: function](#property-asFragment-boolean)
+  - [`asFragment`: boolean](#property-asFragment-boolean)
+  - [`inlinedJSStyles`: object](#property-inlinedJSStyles-object)
 - [Dev mode width `NODE_ENV`](#dev-mode-width-node_env)
 
 ## About the `styles` objects
@@ -201,6 +202,20 @@ If you pass `asFragment={true}`, there will be no enclosing tag around the child
     <Styled
         styles={{}}
         asFragment={true}
+    >
+        ...
+```
+
+### Property `inlinedJSStyles`: object
+
+<sup>[back to ToC &uarr;](#table-of-contents)</sup>
+
+If you pass `inlinedJSStyles={{color: '#c00'}}`, that style will be inlined in the html tag. This make sense for specific logic but should not be the default way to inject styles.
+
+```JavaScript
+    <Styled
+        styles={{}}
+        inlinedJSStyles={{color: '#c00'}}
     >
         ...
 ```

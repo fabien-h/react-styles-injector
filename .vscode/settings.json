@@ -1,6 +1,11 @@
 {
-	"editor.tabSize": 4,
-	"prettier.useTabs": true,
 	"editor.formatOnSave": true,
-	"prettier.singleQuote": true
+	"editor.tabSize": 2,
+	"git.autofetch": true,
+	"git.confirmSync": false,
+	"git.ignoreLimitWarning": true,
+	"prettier.printWidth": 80,
+	"prettier.singleQuote": true,
+	"prettier.trailingComma": "all",
+	"tslint.configFile": "tslint.json"
 }
