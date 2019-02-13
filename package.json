@@ -17,7 +17,9 @@
     "node": ">=8.0.0"
   },
   "scripts": {
+    "build:dev-watch": "rollup -w --config rollup.config.dev.js",
     "build": "rimraf dist && tsc --module commonjs && rollup --config rollup.config.build.js",
+    "dev": "rimraf dist && concurrently \"npm run build:dev-watch\" --kill-others --restartTries 2 --restartDelay 200",
     "release": "npm run build && release-it"
   },
   "repository": {
@@ -36,6 +38,7 @@
   "devDependencies": {
     "@types/react": "^16.8.2",
     "@types/react-dom": "^16.8.0",
+    "concurrently": "^4.1.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "release-it": "^10.1.0",

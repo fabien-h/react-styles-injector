@@ -25,6 +25,9 @@ export default {
       sourcemap: true,
     },
   ],
+  watch: {
+    include: 'src/**',
+  },
   external: [
     ...Object.keys(_package.dependencies || {}),
     ...Object.keys(_package.peerDependencies || {}),
