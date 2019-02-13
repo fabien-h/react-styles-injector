@@ -82,6 +82,7 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
       asFragment,
       children,
       className,
+      containerRef,
       styles,
       tag,
       ...otherHTMLProps
@@ -107,7 +108,7 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
 
       return React.createElement(
         ComponentTag,
-        { className: compiledClasseName, ...otherHTMLProps },
+        { className: compiledClasseName, ref: containerRef, ...otherHTMLProps },
         children,
       );
     }
@@ -133,7 +134,11 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
           ? children
           : React.createElement(
               ComponentTag,
-              { className: compiledClasseName, ...otherHTMLProps },
+              {
+                className: compiledClasseName,
+                ref: containerRef,
+                ...otherHTMLProps,
+              },
               children,
             )}
       </React.Fragment>

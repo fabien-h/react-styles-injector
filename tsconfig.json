@@ -29,7 +29,7 @@
     "target": "es5",
     /* Folders */
     "baseUrl": "src",
-    "outDir": "dist/lib",
+    "outDir": "dist",
     "rootDir": "src",
     "typeRoots": ["node_modules/@types"],
     "types": ["node"]
