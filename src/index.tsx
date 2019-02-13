@@ -82,7 +82,6 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
       asFragment,
       children,
       className,
-      containerRef,
       styles,
       tag,
       ...otherHTMLProps

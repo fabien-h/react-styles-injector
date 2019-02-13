@@ -14,7 +14,6 @@ It plays well with [pcss-loader for webpack](https://github.com/fabien-h/pcss-lo
   - [`styles`: object or array of objects](#property-styles-object-or-array-of-objects)
   - [`className`: string](#property-classname-string)
   - [`initCache`: boolean](#property-initcache-boolean)
-  - [`containerRef`: function](#property-containerref-function)
   - [`asFragment`: boolean](#property-asFragment-boolean)
   - [`inlinedJSStyles`: object](#property-inlinedJSStyles-object)
 - [Dev mode width `NODE_ENV`](#dev-mode-width-node_env)
@@ -173,24 +172,6 @@ This property is used server side only. It helps with rendering time optimizatio
 - If you add `initCache` multiple times, it resets the cache each time it encounters the property.
 
 > Caching cannot be the default behavior because the renderer server side may not be stateless and no styles would be injected in the next render.
-
-### Property `containerRef`: function
-
-<sup>[back to ToC &uarr;](#table-of-contents)</sup>
-
-If you need a reference to the actual DOM element for the component container, you can pass a `containerRef` function.
-
-```JavaScript
-    <Styled
-        styles={{}}
-        tag='main'
-        id='mainContainer'
-        containerRef={element => (this.containerRef = element)}
-    >
-        ...
-```
-
-In the parent of the `Styled` component, `this.containerRef` will be a reference to the DOM `main #mainContainer` html element.
 
 ### Property `asFragment`: function
 
