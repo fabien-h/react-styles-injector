@@ -50,7 +50,7 @@
     "tsc": "^1.20150623.0",
     "typescript": "^3.3.3"
   },
-  "peerDependencies": {
+  "dependencies": {
     "react": "^16.8.2",
     "react-dom": "^16.8.2"
   },
