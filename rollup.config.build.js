@@ -3,6 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import sourceMaps from 'rollup-plugin-sourcemaps';
 import typescript from 'rollup-plugin-typescript2';
+import { terser } from 'rollup-plugin-terser';
 
 export default {
   input: 'src/index.tsx',
@@ -23,10 +24,15 @@ export default {
       format: 'es',
       name: 'Router',
       sourcemap: true,
+      globals: {
+        'react-dom': 'ReactDOM',
+        react: 'React',
+      },
     },
   ],
   external: [
     ...Object.keys(_package.dependencies || {}),
+    ...Object.keys(_package.devDependencies || {}),
     ...Object.keys(_package.peerDependencies || {}),
   ],
   plugins: [
@@ -41,5 +47,6 @@ export default {
       useTsconfigDeclarationDir: true,
     }),
     sourceMaps(),
+    terser(),
   ],
 };
