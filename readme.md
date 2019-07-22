@@ -1,5 +1,7 @@
 # RSI - React Styles Injector
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/fabien-h/react-styles-injector.svg)](https://greenkeeper.io/)
+
 `React Styles Injector` is a [React](https://reactjs.org/) component that injects scoped styles into the DOM. Client and server ready.
 
 It plays well with [pcss-loader for webpack](https://github.com/fabien-h/pcss-loader) to generate scoped styles for PCSS, SASS or plain CSS.
