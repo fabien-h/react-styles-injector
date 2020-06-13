@@ -66,7 +66,7 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
      * Inject in the head only if the element
      * has not already been injected
      */
-    return this.stylesEnsuredAsArray(props.styles).forEach(style => {
+    return this.stylesEnsuredAsArray(props.styles).forEach((style) => {
       if (!existingStyles[style.hash]) {
         existingStyles[style.hash] = true;
         let styleTag = document.createElement('style');
@@ -90,7 +90,7 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
     const ComponentTag = tag || 'div';
     const compiledClasseName = [
       className || '',
-      ...this.stylesEnsuredAsArray(styles).map(style => style.hash),
+      ...this.stylesEnsuredAsArray(styles).map((style) => style.hash),
     ]
       .join(' ')
       .trim();
@@ -120,7 +120,7 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
      */
     return (
       <React.Fragment>
-        {this.stylesEnsuredAsArray(styles).map(style => {
+        {this.stylesEnsuredAsArray(styles).map((style) => {
           if (useServerCache && existingStyles[style.hash]) return null;
           existingStyles[style.hash] = true;
           return (
