@@ -8,7 +8,7 @@ export interface IStyle {
 export interface IStyledProps {
   // Class
   className?: string;
-  containerRef: () => void;
+  containerRef?: () => void;
   // Id
   id?: string;
   // React content of the node
