@@ -52,7 +52,10 @@ export default class Styled extends React.PureComponent<IStyledProps, {}> {
   /**
    * If only one style is passed, enclose in an array
    */
-  private stylesEnsuredAsArray = (styles: IStyle[] | IStyle): IStyle[] => {
+  private stylesEnsuredAsArray = (
+    styles: IStyle[] | IStyle | undefined,
+  ): IStyle[] => {
+    if (!styles) return [];
     if (Array.isArray(styles)) return styles;
     return [styles];
   };

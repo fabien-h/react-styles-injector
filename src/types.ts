@@ -12,9 +12,9 @@ export interface IStyledProps {
   // Id
   id?: string;
   // React content of the node
-  children: React.ReactNode;
+  children?: React.ReactNode;
   // Export from pcss-loader
-  styles: IStyle[] | IStyle;
+  styles?: IStyle[] | IStyle;
   // Set the tag of the container
   tag?: string;
   // If true, init and reset the cache for existing styles
