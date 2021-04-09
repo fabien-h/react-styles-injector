@@ -8,6 +8,7 @@ It plays well with [pcss-loader for webpack](https://github.com/fabien-h/pcss-lo
 
 - [About the `styles` objects](#about-the-styles-objects)
 - [Basic example](#basic-example)
+- [Dev mode](#dev-mode)
 - [Properties](#properties)
   - [`tag`: string](#property-tag-string)
   - [`id`: string](#property-id-string)
@@ -120,6 +121,19 @@ and
 - The `main` tag is in the standard HTML flow.
 - Client-side, the style tag is injected into the `head`.
 - Server side, the style tag is injected into the `body`, next to the `main` tag.
+
+## Dev mode
+
+To have the style injector injecting the styles each time they are modified, you have to work on the host localhost or 127.0.0.1.
+
+If you work locally on another host, you can force the injector to go to dev mode:
+
+```JavaScript
+import { setDevMode } from 'react-styles-injector';
+
+// Before anything executes
+setDevMode();
+```
 
 ## Properties
 

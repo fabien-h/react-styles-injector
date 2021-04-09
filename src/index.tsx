@@ -1,6 +1,6 @@
 import React from 'react';
 import { IStyledProps, IStyle } from 'types';
-declare var NODE_ENV: string;
+declare const window: any;
 
 // Hashmap containing the hash of all the already injected styles
 let existingStyles: { [key: string]: boolean } = {};
@@ -23,11 +23,17 @@ const isClient: boolean = !!(
 // Tell if the mode is development
 // Has to be set in NODE_ENV
 let isDev = false;
-try {
-  // Has to be in a try catch because
-  // NODE_ENV may be not replaced or defined
-  isDev = NODE_ENV === 'development';
-} catch (error) {}
+if (
+  isClient &&
+  (window.location.host === 'localhost' || window.location.host === '127.0.0.1')
+) {
+  isDev = true;
+}
+export const setDevMode = () => {
+  if (isClient) {
+    isDev = true;
+  }
+};
 
 export default class Styled extends React.PureComponent<IStyledProps, {}> {
   constructor(props: IStyledProps) {
